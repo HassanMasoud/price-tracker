@@ -19,8 +19,21 @@ async function checkPrice() {
 
   const priceNumber = parseFloat(priceString.replace("$", ""));
   if (priceNumber < minPrice) {
-    console.log("It's cheap");
-  } else {
-    console.log("It's expensive");
+    sendEmail(
+      "Price is low",
+      `The price on ${url} has dropped below ${minPrice}`
+    );
   }
+}
+
+function sendEmail(subject, body) {
+  const email = {
+    to: "vixah57553@bpghmag.com",
+    from: "amazon-price-checker@amazon.com",
+    subject: subject,
+    text: body,
+    html: body,
+  };
+
+  return sgMail.send(email);
 }
