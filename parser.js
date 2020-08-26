@@ -11,18 +11,23 @@ const minPrice = args[1];
 checkPrice();
 
 async function checkPrice() {
-  const priceString = await nightmare
-    .goto(url)
-    .wait("#priceblock_ourprice")
-    .evaluate(() => document.getElementById("priceblock_ourprice").innerText)
-    .end();
+  try {
+    const priceString = await nightmare
+      .goto(url)
+      .wait("#priceblock_ourprice")
+      .evaluate(() => document.getElementById("priceblock_ourprice").innerText)
+      .end();
 
-  const priceNumber = parseFloat(priceString.replace("$", ""));
-  if (priceNumber < minPrice) {
-    sendEmail(
-      "Price is low",
-      `The price on ${url} has dropped below ${minPrice}`
-    );
+    const priceNumber = parseFloat(priceString.replace("$", ""));
+    if (priceNumber < minPrice) {
+      sendEmail(
+        "Price is low",
+        `The price on ${url} has dropped below ${minPrice}`
+      );
+    }
+  } catch (error) {
+    sendEmail("Amazon Price Checker Error", error.message);
+    throw error;
   }
 }
 
