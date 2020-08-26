@@ -20,13 +20,13 @@ async function checkPrice() {
 
     const priceNumber = parseFloat(priceString.replace("$", ""));
     if (priceNumber < minPrice) {
-      sendEmail(
+      await sendEmail(
         "Price is low",
         `The price on ${url} has dropped below ${minPrice}`
       );
     }
   } catch (error) {
-    sendEmail("Amazon Price Checker Error", error.message);
+    await sendEmail("Amazon Price Checker Error", error.message);
     throw error;
   }
 }
